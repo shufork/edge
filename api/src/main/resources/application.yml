@@ -1,0 +1,70 @@
+server:
+  port: 20200
+
+zuul:
+  ignored-services: '*'
+  sensitive-headers: Cookie,Set-Cookie,Authorization
+  retryable: true
+  routes:
+    auth:
+      path: /uaa/**
+      service-id: auth
+      strip-prefix: false
+    user:
+      path: /users/**
+      service-id: user
+      strip-prefix: false
+    address:
+      path: /coc/clans/**
+      service-id: coc-clan
+      strip-prefix: false
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+management:
+  security:
+    enabled: false
+
+security:
+  basic:
+    enabled: false
+  ignored: /users/active,/uaa/auth/token/**
+
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 80000
+
+spring:
+  profiles: test
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    database: 0
+    pool:
+      max-active: 10
+      max-idle: 10
+      max-wait: -1
+      min-idle: 0
+
+security:
+  oauth2:
+    client:
+      client-id: api
+      client-secret: secret
+      access-token-uri: http://oauth:20100/uaa/oauth/token
+      user-authorization-uri: http://oauth:20100/uaa/oauth/authorize
+    resource:
+      token-info-uri: http://oauth:20100/uaa/oauth/check_token
