@@ -1,1 +1,54 @@
-#spring:application:name: auth
+spring:
+  application:
+    name: auth
+
+encrypt:
+  fail-on-error: false
+
+---
+spring:
+  profiles: dev
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config
+      profile: dev
+      label: master
+      username: shufork
+      password: shufork
+      fail-fast: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 20
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+    #ip-address: 192.168.0.164
+
+---
+spring:
+  profiles: test
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config
+      profile: test
+      label: master
+      username: shufork
+      password: shufork
+      allow-override: true
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-1:8761/eureka/, http://eureka-2:8762/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+    #ip-address: 192.168.0.164

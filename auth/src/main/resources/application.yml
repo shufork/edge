@@ -1,1 +1,56 @@
-#server:port: 
+
+server:
+  port: 20100
+  context-path: /uaa # IMPORTANT !
+
+
+security:
+  user:
+    name: shufork
+    password: shufork
+  basic:
+    enabled: false
+
+#management:
+#  security:
+#    enabled: false
+
+feign:
+  hystrix:
+    enabled: true
+
+liquibase:
+  change-log: classpath:db/changelog/changelog.xml
+  #default-schema: db_auth
+  #drop-first: false
+  #enabled: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    me.shufork.common.rpc.client: DEBUG
+
+
+eureka:
+  instance:
+    statusPageUrlPath: /uaa/info
+    healthCheckUrlPath: /uaa/health
+
+---
+spring:
+  profiles: dev
+
+---
+spring:
+  profiles: test
+---
+spring:
+  profiles: fast-discovery
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30

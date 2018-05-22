@@ -48,16 +48,8 @@ hystrix:
             timeoutInMilliseconds: 80000
 
 spring:
-  profiles: test
   redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
-    database: 0
-    pool:
-      max-active: 10
-      max-idle: 10
-      max-wait: -1
-      min-idle: 0
+    database: 1
 
 security:
   oauth2:
@@ -68,3 +60,22 @@ security:
       user-authorization-uri: http://oauth:20100/uaa/oauth/authorize
     resource:
       token-info-uri: http://oauth:20100/uaa/oauth/check_token
+
+---
+spring:
+  profiles: dev
+
+---
+spring:
+  profiles: test
+---
+spring:
+  profiles: fast-discovery
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30

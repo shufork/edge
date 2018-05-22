@@ -1,4 +1,4 @@
-package me.shufork.biz.filter;
+package me.shufork.gateway.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
